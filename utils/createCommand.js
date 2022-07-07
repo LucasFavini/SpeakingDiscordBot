@@ -5,7 +5,6 @@ const { createAudioResource } = require('@discordjs/voice');
 const { createAudioPlayer, NoSubscriberBehavior } = require('@discordjs/voice');
 
 
-const replyMsgs = [];
 const createCommand = (commandName, commandDesc) => {
     const obj = {
         data: new SlashCommandBuilder()
