@@ -2,8 +2,23 @@ const { join } = require('node:path');
 const { createAudioResource } = require('@discordjs/voice');
 const { createAudioPlayer, NoSubscriberBehavior } = require('@discordjs/voice');
 const Voice = require('@discordjs/voice')
+const sleep = ms => new Promise(res => setTimeout(res, ms));
 
 const Speak = class {   
+
+    async joinChannel(channelData){
+        const channel = channelData;
+        const connection = Voice.joinVoiceChannel({
+            channelId: channel.id,
+            guildId: channel.guild.id,
+            adapterCreator: channel.guild.voiceAdapterCreator,
+        });
+        const player = createAudioPlayer({
+            behaviors: {
+                noSubscriber: NoSubscriberBehavior.Pause,
+            },
+        });
+    }
 
     async gameStart(channelData, nAzar){
         const channel = channelData;
@@ -22,8 +37,6 @@ const Speak = class {
         
         connection.subscribe(player);
         player.play(resource)
-        console.log(nAzar)
-
     }
 
     async minionsSpawn(channelData, nAzar){
@@ -43,8 +56,6 @@ const Speak = class {
         
         connection.subscribe(player);
         player.play(resource)
-        console.log(nAzar)
-
     }
 
     async firstBlood(channelData, nAzar){
@@ -85,7 +96,7 @@ const Speak = class {
         player.play(resource)
     }    
 
-    async getDoubleKill(channelData){
+    async getDoubleKill(channelData, nAzar){
         const channel = channelData;
         const connection = Voice.joinVoiceChannel({
             channelId: channel.id,
@@ -97,7 +108,7 @@ const Speak = class {
                 noSubscriber: NoSubscriberBehavior.Pause,
             },
         });
-        let resource = createAudioResource(join(__dirname, `../gameEvents/inGame/multikills/doublekills/dk1.wav`), { inlineVolume: true });
+        let resource = createAudioResource(join(__dirname, `../gameEvents/inGame/multikills/doublekills/dk${nAzar}.wav`), { inlineVolume: true });
         resource.volume.setVolume(0.5);
         
         connection.subscribe(player);
@@ -105,7 +116,7 @@ const Speak = class {
 
     }
 
-    async getTripleKill(channelData){
+    async getTripleKill(channelData, nAzar){
         const channel = channelData;
         const connection = Voice.joinVoiceChannel({
             channelId: channel.id,
@@ -117,7 +128,7 @@ const Speak = class {
                 noSubscriber: NoSubscriberBehavior.Pause,
             },
         });
-        let resource = createAudioResource(join(__dirname, `../gameEvents/inGame/multikills/triplekills/tk1.wav`), { inlineVolume: true });
+        let resource = createAudioResource(join(__dirname, `../gameEvents/inGame/multikills/triplekills/tk${nAzar}.wav`), { inlineVolume: true });
         resource.volume.setVolume(0.5);
         
         connection.subscribe(player);
@@ -125,7 +136,7 @@ const Speak = class {
     }    
 
     
-    async getQuadraKill(channelData){
+    async getQuadraKill(channelData, nAzar){
         const channel = channelData;
         const connection = Voice.joinVoiceChannel({
             channelId: channel.id,
@@ -137,7 +148,7 @@ const Speak = class {
                 noSubscriber: NoSubscriberBehavior.Pause,
             },
         });
-        let resource = createAudioResource(join(__dirname, `../gameEvents/inGame/multikills/quadrakills/qk1.wav`), { inlineVolume: true });
+        let resource = createAudioResource(join(__dirname, `../gameEvents/inGame/multikills/quadrakills/qk${nAzar}.wav`), { inlineVolume: true });
         resource.volume.setVolume(0.5);
         
         connection.subscribe(player);
@@ -145,7 +156,7 @@ const Speak = class {
     }  
 
     
-    async getPentaKill(channelData){
+    async getPentaKill(channelData, nAzar){
         const channel = channelData;
         const connection = Voice.joinVoiceChannel({
             channelId: channel.id,
@@ -157,14 +168,15 @@ const Speak = class {
                 noSubscriber: NoSubscriberBehavior.Pause,
             },
         });
-        let resource = createAudioResource(join(__dirname, `../gameEvents/inGame/multikills/pentakills/pk1.wav`), { inlineVolume: true });
+        let resource = createAudioResource(join(__dirname, `../gameEvents/inGame/multikills/pentakills/pk${nAzar}.wav`), { inlineVolume: true });
         resource.volume.setVolume(0.5);
         
         connection.subscribe(player);
         player.play(resource)
+        console.log('entro')
     }  
 
-    async getEnemyAce(channelData){
+    async getEnemyAce(channelData, nAzar){
         const channel = channelData;
         const connection = Voice.joinVoiceChannel({
             channelId: channel.id,
@@ -176,14 +188,14 @@ const Speak = class {
                 noSubscriber: NoSubscriberBehavior.Pause,
             },
         });
-        let resource = createAudioResource(join(__dirname, `../gameEvents/inGame/multikills/ace/ace1.wav`), { inlineVolume: true });
+        let resource = createAudioResource(join(__dirname, `../gameEvents/inGame/multikills/ace/ace${nAzar}.wav`), { inlineVolume: true });
         resource.volume.setVolume(0.5);
         
         connection.subscribe(player);
         player.play(resource)
     }  
 
-    async getDragon(channelData){
+    async getDragon(channelData, nAzar){
         const channel = channelData;
         const connection = Voice.joinVoiceChannel({
             channelId: channel.id,
@@ -195,14 +207,16 @@ const Speak = class {
                 noSubscriber: NoSubscriberBehavior.Pause,
             },
         });
-        let resource = createAudioResource(join(__dirname, `../gameEvents/dragons/dn1.wav`), { inlineVolume: true });
+        let resource = createAudioResource(join(__dirname, `../gameEvents/dragons/dn${nAzar}.wav`), { inlineVolume: true });
         resource.volume.setVolume(0.5);
         
         connection.subscribe(player);
         player.play(resource)
+        console.log(`numero en firstblood${nAzar}`)
+
     }  
 
-    async getLoseDragon(channelData){
+    async getLoseDragon(channelData, nAzar){
         const channel = channelData;
         const connection = Voice.joinVoiceChannel({
             channelId: channel.id,
@@ -214,14 +228,14 @@ const Speak = class {
                 noSubscriber: NoSubscriberBehavior.Pause,
             },
         });
-        let resource = createAudioResource(join(__dirname, `../gameEvents/dragons/de1.wav`), { inlineVolume: true });
+        let resource = createAudioResource(join(__dirname, `../gameEvents/dragons/de${nAzar}.wav`), { inlineVolume: true });
         resource.volume.setVolume(0.5);
         
         connection.subscribe(player);
         player.play(resource)
     }  
 
-    async getHerald(channelData){
+    async getHerald(channelData, nAzar){
         const channel = channelData;
         const connection = Voice.joinVoiceChannel({
             channelId: channel.id,
@@ -233,14 +247,14 @@ const Speak = class {
                 noSubscriber: NoSubscriberBehavior.Pause,
             },
         });
-        let resource = createAudioResource(join(__dirname, `../gameEvents/baron_heraldo/hn1.wav`), { inlineVolume: true });
+        let resource = createAudioResource(join(__dirname, `../gameEvents/baron_heraldo/hn${nAzar}.wav`), { inlineVolume: true });
         resource.volume.setVolume(0.5);
         
         connection.subscribe(player);
         player.play(resource)
     }  
 
-    async getLoseHerald(channelData){
+    async getLoseHerald(channelData, nAzar){
         const channel = channelData;
         const connection = Voice.joinVoiceChannel({
             channelId: channel.id,
@@ -252,14 +266,14 @@ const Speak = class {
                 noSubscriber: NoSubscriberBehavior.Pause,
             },
         });
-        let resource = createAudioResource(join(__dirname, `../gameEvents/baron_heraldo/he1.wav`), { inlineVolume: true });
+        let resource = createAudioResource(join(__dirname, `../gameEvents/baron_heraldo/he${nAzar}.wav`), { inlineVolume: true });
         resource.volume.setVolume(0.5);
         
         connection.subscribe(player);
         player.play(resource)
     }  
 
-    async getBaron(channelData){
+    async getBaron(channelData, nAzar){
         const channel = channelData;
         const connection = Voice.joinVoiceChannel({
             channelId: channel.id,
@@ -271,14 +285,14 @@ const Speak = class {
                 noSubscriber: NoSubscriberBehavior.Pause,
             },
         });
-        let resource = createAudioResource(join(__dirname, `../gameEvents/baron_heraldo/bn1.wav`), { inlineVolume: true });
+        let resource = createAudioResource(join(__dirname, `../gameEvents/baron_heraldo/bn${nAzar}.wav`), { inlineVolume: true });
         resource.volume.setVolume(0.5);
         
         connection.subscribe(player);
         player.play(resource)
     }  
 
-    async getLoseBaron(channelData){
+    async getLoseBaron(channelData, nAzar){
         const channel = channelData;
         const connection = Voice.joinVoiceChannel({
             channelId: channel.id,
@@ -290,14 +304,14 @@ const Speak = class {
                 noSubscriber: NoSubscriberBehavior.Pause,
             },
         });
-        let resource = createAudioResource(join(__dirname, `../gameEvents/baron_heraldo/be1.wav`), { inlineVolume: true });
+        let resource = createAudioResource(join(__dirname, `../gameEvents/baron_heraldo/be${nAzar}.wav`), { inlineVolume: true });
         resource.volume.setVolume(0.5);
         
         connection.subscribe(player);
         player.play(resource)
     }  
 
-    async getVictory(channelData){
+    async getVictory(channelData, nAzar){
         const channel = channelData;
         const connection = Voice.joinVoiceChannel({
             channelId: channel.id,
@@ -309,14 +323,17 @@ const Speak = class {
                 noSubscriber: NoSubscriberBehavior.Pause,
             },
         });
-        let resource = createAudioResource(join(__dirname, `../gameEvents/inGame/victory/v1.wav`), { inlineVolume: true });
+        let resource = createAudioResource(join(__dirname, `../gameEvents/inGame/victory/v${nAzar}.wav`), { inlineVolume: true });
         resource.volume.setVolume(0.5);
         
         connection.subscribe(player);
         player.play(resource)
+
+        await sleep(10000);
+        connection.destroy();
     }  
 
-    async getDefeat(channelData){
+    async getDefeat(channelData, nAzar){
         const channel = channelData;
         const connection = Voice.joinVoiceChannel({
             channelId: channel.id,
@@ -328,15 +345,15 @@ const Speak = class {
                 noSubscriber: NoSubscriberBehavior.Pause,
             },
         });
-        let resource = createAudioResource(join(__dirname, `../gameEvents/inGame/defeat/d1.wav`), { inlineVolume: true });
+        let resource = createAudioResource(join(__dirname, `../gameEvents/inGame/defeat/d${nAzar}.wav`), { inlineVolume: true });
         resource.volume.setVolume(0.5);
         
         connection.subscribe(player);
         player.play(resource)
+
+        await sleep(10000);
+        connection.destroy();
     }  
-
-
-
 
 }
 

@@ -45,5 +45,30 @@ const myHttp = class {
     return channel
   }
 
+  async isGameOn() {
+		const sleep = ms => new Promise(res => setTimeout(res, ms));
+    while (true) {
+      await sleep(1000);
+      try {
+        let response = await this.getInfo().then().catch(e => e.code);
+        if (response === 'ECONNREFUSED' || response == 'RESOURCE_NOT_FOUND') {
+          await sleep(1000);
+          console.log('La partida aun no ha comenzado')
+          return false
+        }
+        else {
+          await this.getInfo().then(res => res)
+          console.log('La partida ha comenzado')
+          
+
+          return true
+        }
+      } catch (error) {
+        //console.log(error.code) TODO agregar correcion 
+      }
+    }
+  };
 }
+
+
 module.exports = myHttp;
