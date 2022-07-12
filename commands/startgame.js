@@ -69,9 +69,8 @@ module.exports = {
 
                     if (res.EventName === 'FirstBrick' && res.EventID == lastEvent && res.EventID != contador) {
                       if (myTeam.includes(res.KillerName)) {
-                        marianoCloss.getTurret(voiceChannel, num(1, 2));
+                        marianoCloss.firstTurret(voiceChannel, num(1, 2));
                         contador = res.EventID
-                        console.log('ENTRO')
                       }
                     }
 
@@ -79,7 +78,6 @@ module.exports = {
                       if (myTeam.includes(res.KillerName)) {
                         marianoCloss.getTurret(voiceChannel, num(1, 2));
                         contador = res.EventID
-                        console.log('ENTRO')
                       }
                     }
 

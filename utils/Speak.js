@@ -58,6 +58,24 @@ const Speak = class {
         player.play(resource)
     }
 
+    async firstTurret(channelData, nAzar){
+        const channel = channelData;
+        const connection = Voice.joinVoiceChannel({
+            channelId: channel.id,
+            guildId: channel.guild.id,
+            adapterCreator: channel.guild.voiceAdapterCreator,
+        });
+        const player = createAudioPlayer({
+            behaviors: {
+                noSubscriber: NoSubscriberBehavior.Pause,
+            },
+        });
+        let resource = createAudioResource(join(__dirname, `../gameEvents/inGame/turrets_ini/tpN${nAzar}.wav`), { inlineVolume: true });
+        resource.volume.setVolume(0.5);
+        connection.subscribe(player);
+        player.play(resource)
+    }
+
     async getTurret(channelData, nAzar){
         const channel = channelData;
         const connection = Voice.joinVoiceChannel({
