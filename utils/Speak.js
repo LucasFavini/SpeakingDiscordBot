@@ -58,6 +58,43 @@ const Speak = class {
         player.play(resource)
     }
 
+    async getTurret(channelData, nAzar){
+        const channel = channelData;
+        const connection = Voice.joinVoiceChannel({
+            channelId: channel.id,
+            guildId: channel.guild.id,
+            adapterCreator: channel.guild.voiceAdapterCreator,
+        });
+        const player = createAudioPlayer({
+            behaviors: {
+                noSubscriber: NoSubscriberBehavior.Pause,
+            },
+        });
+        let resource = createAudioResource(join(__dirname, `../gameEvents/inGame/turrets_ini/tN${nAzar}.wav`), { inlineVolume: true });
+        resource.volume.setVolume(0.5);
+        connection.subscribe(player);
+        player.play(resource)
+    }
+
+    async getIni(channelData, nAzar){
+        const channel = channelData;
+        const connection = Voice.joinVoiceChannel({
+            channelId: channel.id,
+            guildId: channel.guild.id,
+            adapterCreator: channel.guild.voiceAdapterCreator,
+        });
+        const player = createAudioPlayer({
+            behaviors: {
+                noSubscriber: NoSubscriberBehavior.Pause,
+            },
+        });
+        let resource = createAudioResource(join(__dirname, `../gameEvents/inGame/turrets_ini/iN${nAzar}.wav`), { inlineVolume: true });
+        resource.volume.setVolume(0.5);
+        
+        connection.subscribe(player);
+        player.play(resource)
+    }
+
     async firstBlood(channelData, nAzar){
         const channel = channelData;
         const connection = Voice.joinVoiceChannel({
@@ -173,7 +210,45 @@ const Speak = class {
         
         connection.subscribe(player);
         player.play(resource)
-        console.log('entro')
+    }  
+
+    async getAce(channelData, nAzar){
+        const channel = channelData;
+        const connection = Voice.joinVoiceChannel({
+            channelId: channel.id,
+            guildId: channel.guild.id,
+            adapterCreator: channel.guild.voiceAdapterCreator,
+        });
+        const player = createAudioPlayer({
+            behaviors: {
+                noSubscriber: NoSubscriberBehavior.Pause,
+            },
+        });
+        let resource = createAudioResource(join(__dirname, `../gameEvents/inGame/multikills/ace/aceN${nAzar}.wav`), { inlineVolume: true });
+        resource.volume.setVolume(0.5);
+        
+        connection.subscribe(player);
+        player.play(resource)
+    }  
+
+
+    async getEnemyAce(channelData, nAzar){
+        const channel = channelData;
+        const connection = Voice.joinVoiceChannel({
+            channelId: channel.id,
+            guildId: channel.guild.id,
+            adapterCreator: channel.guild.voiceAdapterCreator,
+        });
+        const player = createAudioPlayer({
+            behaviors: {
+                noSubscriber: NoSubscriberBehavior.Pause,
+            },
+        });
+        let resource = createAudioResource(join(__dirname, `../gameEvents/inGame/multikills/ace/aceE${nAzar}.wav`), { inlineVolume: true });
+        resource.volume.setVolume(0.5);
+        
+        connection.subscribe(player);
+        player.play(resource)
     }  
 
     async getEnemyAce(channelData, nAzar){
@@ -212,8 +287,6 @@ const Speak = class {
         
         connection.subscribe(player);
         player.play(resource)
-        console.log(`numero en firstblood${nAzar}`)
-
     }  
 
     async getLoseDragon(channelData, nAzar){
@@ -352,6 +425,16 @@ const Speak = class {
         player.play(resource)
 
         await sleep(10000);
+        connection.destroy();
+    }  
+
+    async closeConnection(channelData, nAzar){
+        const channel = channelData;
+        const connection = Voice.joinVoiceChannel({
+            channelId: channel.id,
+            guildId: channel.guild.id,
+            adapterCreator: channel.guild.voiceAdapterCreator,
+        });
         connection.destroy();
     }  
 

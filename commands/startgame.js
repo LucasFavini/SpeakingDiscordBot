@@ -27,121 +27,165 @@ module.exports = {
       var listening = 0;
       var startgame = true;
       var contador = 0;
+      var stopSearching = true;
       //----------------
 
       while (lobbyEnded === 0) {
         let status = await client.isGameOn()
-        if (!status) { }
+        if (!status) {
+          console.log('Dejo de buscar partida')
+          marianoCloss.closeConnection(voiceChannel)
+          break
+        }
         else {
           lobbyEnded = 1
           if (lobbyEnded === 1) {
             (async function () {
               while (listening === 0) {
-                await sleep(1000);
+                try {
+                  await sleep(1000);
 
-                const num = function randomInRange(min, max) { return Math.floor(Math.random() * (max - min + 1) + min); }
-                const gameData = await client.getInfo();
-                const events = await client.getEvents();
-                const myTeam = lolData.getMyTeam(gameData.data.allPlayers)
+                  const num = function randomInRange(min, max) { return Math.floor(Math.random() * (max - min + 1) + min); }
+                  const gameData = await client.getInfo();
+                  const events = await client.getEvents();
+                  const myTeam = lolData.getMyTeam(gameData.data.allPlayers)
 
-                const currentEvents = lolData.currentEvents(events)
-                currentEvents.forEach((res) => {
-                  let lastEvent = currentEvents.length - 1
 
-                  if (res.EventName === 'GameStart' && startgame === true) {
-                    marianoCloss.gameStart(voiceChannel, num(1, 6));
-                    contador = res.EventID
-                    startgame = false
-                  }
+                  const currentEvents = lolData.currentEvents(events)
+                  currentEvents.forEach((res) => {
+                    let lastEvent = currentEvents.length - 1
 
-                  if (res.EventName === 'MinionsSpawning' && res.EventID == lastEvent && res.EventID != contador) {
-                    marianoCloss.minionsSpawn(voiceChannel, num(1, 6));
-                    contador = res.EventID
-                  }
-
-                  if (res.EventName === 'FirstBlood' && res.EventID == lastEvent && res.EventID != contador && myTeam.includes(res.Recipient)) {
-                    marianoCloss.firstBlood(voiceChannel, num(1, 6));
-                    contador = res.EventID
-                  }
-                  if (res.EventName === 'FirstBlood' && res.EventID == lastEvent && res.EventID != contador && !myTeam.includes(res.Recipient)) {
-                    marianoCloss.LosefirstBlood(voiceChannel, num(1, 6));
-                    contador = res.EventID
-                  }
-
-                  if (res.EventName === 'Multikill' && res.KillStreak >= 2 && res.EventID == lastEvent && res.EventID != contador
-                    && myTeam.includes(res.KillerName)) {
-
-                    if (res.KillStreak === 2) {
-                      marianoCloss.getDoubleKill(voiceChannel, num(1, 6))
+                    if (res.EventName === 'GameStart' && startgame === true) {
+                      marianoCloss.gameStart(voiceChannel, num(1, 6));
+                      contador = res.EventID
+                      startgame = false
                     }
-                    else if (res.KillStreak === 3) {
-                      marianoCloss.getTripleKill(voiceChannel, num(1, 6))
+
+                    if (res.EventName === 'MinionsSpawning' && res.EventID == lastEvent && res.EventID != contador) {
+                      marianoCloss.minionsSpawn(voiceChannel, num(1, 6));
+                      contador = res.EventID
                     }
-                    else if (res.KillStreak === 4) {
-                      marianoCloss.getQuadraKill(voiceChannel, num(1, 6))
+
+
+                    if (res.EventName === 'FirstBrick' && res.EventID == lastEvent && res.EventID != contador) {
+                      if (myTeam.includes(res.KillerName)) {
+                        marianoCloss.getTurret(voiceChannel, num(1, 2));
+                        contador = res.EventID
+                        console.log('ENTRO')
+                      }
                     }
-                    else if (res.KillStreak === 5) {
-                      marianoCloss.getPentaKill(voiceChannel, num(1, 6))
+
+                    if (res.EventName === 'TurretKilled' && res.EventID == lastEvent && res.EventID != contador) {
+                      if (myTeam.includes(res.KillerName)) {
+                        marianoCloss.getTurret(voiceChannel, num(1, 2));
+                        contador = res.EventID
+                        console.log('ENTRO')
+                      }
                     }
-                    contador = res.EventID
+
+                    if (res.EventName === 'InhibKilled' && res.EventID == lastEvent && res.EventID != contador) {
+                      if (myTeam.includes(res.KillerName)) {
+                        marianoCloss.getIni(voiceChannel, num(1, 2));
+                        contador = res.EventID
+                      }
+                    }
+
+                    if (res.EventName === 'FirstBlood' && res.EventID == lastEvent && res.EventID != contador) {
+                      if (myTeam.includes(res.Recipient)) {
+                        marianoCloss.firstBlood(voiceChannel, num(1, 6));
+                        contador = res.EventID
+                      } else {
+                        marianoCloss.LosefirstBlood(voiceChannel, num(1, 6));
+                        contador = res.EventID
+                      }
+                    }
+
+                    if (res.EventName === 'Multikill' && res.KillStreak >= 2 && res.EventID == lastEvent && res.EventID != contador
+                      && myTeam.includes(res.KillerName)) {
+
+                      if (res.KillStreak === 2) {
+                        marianoCloss.getDoubleKill(voiceChannel, num(1, 6))
+                      }
+                      else if (res.KillStreak === 3) {
+                        marianoCloss.getTripleKill(voiceChannel, num(1, 6))
+                      }
+                      else if (res.KillStreak === 4) {
+                        marianoCloss.getQuadraKill(voiceChannel, num(1, 6))
+                      }
+                      else if (res.KillStreak === 5) {
+                        marianoCloss.getPentaKill(voiceChannel, num(1, 6))
+                      }
+                      contador = res.EventID
+                    }
+
+                    if (res.EventName === 'Ace' && res.EventID == lastEvent && res.EventID != contador) {
+                      if (myTeam.includes(res.Acer)) {
+                        marianoCloss.getAce(voiceChannel, num(1, 2));
+                        contador = res.EventID
+                      } else {
+                        marianoCloss.getEnemyAce(voiceChannel, num(1, 6));
+                        contador = res.EventID
+                      }
+
+                    }
+
+                    if (res.EventName === 'DragonKill' && res.EventID == lastEvent && res.EventID != contador) {
+                      if (myTeam.includes(res.KillerName)) {
+                        marianoCloss.getDragon(voiceChannel, num(1, 6))
+                        contador = res.EventID
+                      } else {
+                        marianoCloss.getLoseDragon(voiceChannel, num(1, 6))
+                        contador = res.EventID
+
+                      }
+
+                    }
+
+                    if (res.EventName === 'HeraldKill' && res.EventID == lastEvent && res.EventID != contador) {
+                      if (myTeam.includes(res.KillerName)) {
+                        marianoCloss.getHerald(voiceChannel, num(1, 6))
+                        contador = res.EventID
+                      } else {
+                        marianoCloss.getLoseHerald(voiceChannel, num(1, 6))
+                        contador = res.EventID
+                      }
+
+                    }
+
+                    if (res.EventName === 'BaronKill' && res.EventID == lastEvent && res.EventID != contador) {
+                      if (myTeam.includes(res.KillerName)) {
+                        marianoCloss.getBaron(voiceChannel, num(1, 6))
+                        contador = res.EventID
+                      } else {
+                        marianoCloss.getLoseBaron(voiceChannel, num(1, 6))
+                        contador = res.EventID
+                      }
+
+                    }
+
+                    if (res.EventName === 'GameEnd' && res.Result === 'Win' && res.EventID == lastEvent && res.EventID != contador) {
+                      marianoCloss.getVictory(voiceChannel, num(1, 6))
+                      contador = res.EventID
+                      listening = 1
+                      lobbyEnded = 0
+                    }
+
+                    if (res.EventName === 'GameEnd' && res.Result === 'Lose' && res.EventID == lastEvent && res.EventID != contador) {
+                      marianoCloss.getDefeat(voiceChannel, num(1, 6))
+                      contador = res.EventID
+                      listening = 1
+                      lobbyEnded = 0
+                    }
+
+                  });
+                } catch (error) {
+                  if (error.code === 'ECONNREFUSED') {
+                    marianoCloss.closeConnection(voiceChannel)
+                    break
                   }
-
-                  if (res.EventName === 'Ace' && res.EventID == lastEvent && res.EventID != contador && !myTeam.includes(res.Acer)) {
-                    marianoCloss.getEnemyAce(voiceChannel, num(1, 6));
-                    contador = res.EventID
-                  }
-
-                  if (res.EventName === 'DragonKill' && res.EventID == lastEvent && res.EventID != contador && myTeam.includes(res.KillerName)) {
-                    marianoCloss.getDragon(voiceChannel, num(1, 6))
-                    contador = res.EventID
-                  }
-
-                  if (res.EventName === 'DragonKill' && res.EventID == lastEvent && res.EventID != contador && !myTeam.includes(res.KillerName)) {
-                    marianoCloss.getLoseDragon(voiceChannel, num(1, 6))
-                    contador = res.EventID
-                  }
-
-
-                  if (res.EventName === 'HeraldKill' && res.EventID == lastEvent && res.EventID != contador && myTeam.includes(res.KillerName)) {
-                    marianoCloss.getHerald(voiceChannel, num(1, 6))
-                    contador = res.EventID
-                  }
-
-                  if (res.EventName === 'HeraldKill' && res.EventID == lastEvent && res.EventID != contador && !myTeam.includes(res.KillerName)) {
-                    marianoCloss.getLoseHerald(voiceChannel, num(1, 6))
-                    contador = res.EventID
-                  }
-
-                  if (res.EventName === 'BaronKill' && res.EventID == lastEvent && res.EventID != contador && myTeam.includes(res.KillerName)) {
-                    marianoCloss.getBaron(voiceChannel, num(1, 6))
-                    contador = res.EventID
-                  }
-
-                  if (res.EventName === 'BaronKill' && res.EventID == lastEvent && res.EventID != contador && !myTeam.includes(res.KillerName)) {
-                    marianoCloss.getLoseBaron(voiceChannel, num(1, 6))
-                    contador = res.EventID
-                  }
-
-                  if (res.EventName === 'GameEnd' && res.Result === 'Win' && res.EventID == lastEvent && res.EventID != contador) {
-                    marianoCloss.getVictory(voiceChannel, num(1, 6))
-                    contador = res.EventID
-                    listening = 1
-                    lobbyEnded = 0
-
-                  }
-
-                  if (res.EventName === 'GameEnd' && res.Result === 'Lose' && res.EventID == lastEvent && res.EventID != contador) {
-                    marianoCloss.getDefeat(voiceChannel, num(1, 6))
-                    contador = res.EventID
-                    listening = 1
-                    lobbyEnded = 0
-
-                  }
-
-                });
+                }
               }
             })();
-
           }
         }
       }

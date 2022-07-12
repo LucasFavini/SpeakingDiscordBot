@@ -10,6 +10,9 @@ const eventData = '/liveclientdata/eventdata';
 
 const userData = 'https://127.0.0.1:2999/liveclientdata/playerscores?summonerName=7VII'
 
+var stopSearching = true
+setTimeout(() => {stopSearching = false}, 500000);
+
 const httpsAgent = new https.Agent({
   ca: fs.readFileSync(path.join(__dirname, '../utils/riotgames.pem'), 'utf-8')
 });
@@ -24,6 +27,8 @@ const myHttp = class {
           .then(res => res)
       } catch (error) {
         console.error(error)
+        console.error('7777777')
+
       }
     }
     return await getAllGameData()
@@ -47,21 +52,18 @@ const myHttp = class {
 
   async isGameOn() {
 		const sleep = ms => new Promise(res => setTimeout(res, ms));
-    while (true) {
-      await sleep(1000);
+    while (stopSearching) {
+      await sleep(3000);
       try {
+        console.log('La partida aun no ha comenzado')
         let response = await this.getInfo().then().catch(e => e.code);
-        if (response === 'ECONNREFUSED' || response == 'RESOURCE_NOT_FOUND') {
-          await sleep(1000);
-          console.log('La partida aun no ha comenzado')
-          return false
-        }
-        else {
+        if (response != 'ECONNREFUSED' || response != 'RESOURCE_NOT_FOUND'){
           await this.getInfo().then(res => res)
-          console.log('La partida ha comenzado')
-          
-
-          return true
+          if (stopSearching) {
+            console.log('La partida ha comenzado')
+            return true
+          }
+            break
         }
       } catch (error) {
         //console.log(error.code) TODO agregar correcion 
