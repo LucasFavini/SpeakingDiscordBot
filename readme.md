@@ -14,7 +14,7 @@
 ![token](./img/bot2.PNG)
 
 - Finalmente activa las opciones de desarrollador en discord<br>
-configuracion --> avanzado --> opciones de dev
+configuracion --> avanzado --> opciones de dev<br>
 ![token](./img/bot3.png)
 
 -   Ya en el codigo busca por <b>config.json</b> y completa segun lo siguiente:<br>
@@ -30,7 +30,7 @@ configuracion --> avanzado --> opciones de dev
     --> Ejecutar <b>deploy-command.js</b> (registrara los comandos) <br>
     --> Ejecutar <b>index.js</b><br>
     --> El bot se conectara al servidor de discord y registrara<br> sus comandos:
-    * /startGame (una vez iniciado estara escuchando y esperando a que una partida inicia para empezar a relatar)
+    * /startGame (una vez iniciado estara escuchando y esperando a que una partida inicie para empezar a relatar)
     * extra commands /join and /leave
   
 <br>
