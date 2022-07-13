@@ -15,7 +15,7 @@
 
 - Finalmente activa las opciones de desarrollador en discord<br>
 configuracion --> avanzado --> opciones de dev
-![token](./img/bot3.PNG)
+![token](./img/bot3.png)
 
 -   Ya en el codigo busca por <b>config.json</b> y completa segun lo siguiente:<br>
     "token": "ElTokenDeTuBotDeDiscord",<br>
