@@ -5,8 +5,17 @@
 
 <h3> Pasos a seguir: </h3>
 
-- Deberas crear un bot en la pagina oficial de Discord.
-  https://discord.com/developers/docs/intro
+- Crea tu bot de discord, guia oficial de Discord.
+  https://discord.com/developers/docs/intro<br>
+- Aqui encontraras el token
+![token](./img/bot1.PNG)
+
+- Aqui encontraras el clientId
+![token](./img/bot2.PNG)
+
+- Finalmente activa las opciones de desarrollador en discord<br>
+configuracion --> avanzado --> opciones de dev
+![token](./img/bot3.PNG)
 
 -   Ya en el codigo busca por <b>config.json</b> y completa segun lo siguiente:<br>
     "token": "ElTokenDeTuBotDeDiscord",<br>
