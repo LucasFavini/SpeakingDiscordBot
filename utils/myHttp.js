@@ -27,8 +27,6 @@ const myHttp = class {
           .then(res => res)
       } catch (error) {
         console.error(error)
-        console.error('7777777')
-
       }
     }
     return await getAllGameData()
